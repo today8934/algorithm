@@ -16,15 +16,20 @@ public class BubbleSort {
             array[i] = Integer.parseInt(bufferedReader.readLine());
         }
 
-        for (int i = 0; i < array.length - 1; i++) {
-            for (int j = i; j < array.length - 1; j++) {
+        for (int i = array.length - 1; i >= 0; i--) {
+            int swapCount = 0;
+
+            for (int j = 0; j < i; j++) {
                 int tmp;
                 if (array[j] > array[j + 1]) {
                     tmp = array[j];
                     array[j] = array[j + 1];
                     array[j + 1] = tmp;
+                    swapCount++;
                 }
             }
+
+            if (swapCount == 0) break;
         }
 
         for (int i = 0; i < array.length; i++) {
