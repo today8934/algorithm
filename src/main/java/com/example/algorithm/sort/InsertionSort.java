@@ -34,14 +34,9 @@ public class InsertionSort {
         }
 
         int[] sumArray = new int[5];
-
-        for (int i = 0; i < sumArray.length; i++) {
-            int sum = 0;
-            for (int j = 0; j <= i; j++) {
-                sum+= array[j];
-            }
-
-            sumArray[i] = sum;
+        sumArray[0] = array[0];
+        for (int i = 1; i < sumArray.length; i++) {
+            sumArray[i] = sumArray[i - 1] + array[i];
         }
 
         int sum = Arrays.stream(sumArray).sum();
