@@ -5,10 +5,9 @@ import java.util.*;
 public class TravelPath {
 
     private static ArrayList<String>[] airportArray;
-    private static boolean[] visited;
-    private static final List<String> answerList = new ArrayList<>();
+    private static List<String> answerList = new ArrayList<>();
     private static HashMap<String, Integer> ticketIndexMap;
-
+    private static boolean isAscending = true;
 
     public static void main(String[] args) {
         /*String[][] tickets = new String[3][2];
@@ -20,7 +19,7 @@ public class TravelPath {
         tickets[2][1] = "HND";
 
         System.out.println(solution(tickets));*/
-
+/*
         String[][] tickets1 = new String[5][2];
         tickets1[0][0] = "ICN";
         tickets1[0][1] = "SFO";
@@ -33,7 +32,20 @@ public class TravelPath {
         tickets1[4][0] = "ATL";
         tickets1[4][1] = "SFO";
 
-        System.out.println(solution(tickets1));
+        System.out.println(solution(tickets1));*/
+
+        String[][] tickets2 = new String[5][2];
+        tickets2[0][0] = "ICN";
+        tickets2[0][1] = "B";
+        tickets2[1][0] = "B";
+        tickets2[1][1] = "ICN";
+        tickets2[2][0] = "ICN";
+        tickets2[2][1] = "A";
+        tickets2[3][0] = "A";
+        tickets2[3][1] = "D";
+        tickets2[4][0] = "D";
+        tickets2[4][1] = "A";
+        System.out.println(solution(tickets2));
     }
 
     public static List<String> solution(String[][] tickets) {
@@ -53,48 +65,34 @@ public class TravelPath {
         }
 
         airportArray = new ArrayList[ticketMapCount];
-        visited = new boolean[tickets.length];
 
-        ticketIndexMap.entrySet().forEach(map -> {
-            airportArray[map.getValue()] = new ArrayList<>();
-        });
-
-        for (int i = 0; i < tickets.length; i++) {
-            visited[i] = false;
-        }
-
-        answerList.add(tickets[0][0]);
+        ticketIndexMap.entrySet().forEach(map -> airportArray[map.getValue()] = new ArrayList<>());
 
         for (String[] ticket: tickets) {
             airportArray[ticketIndexMap.get(ticket[0])].add(ticket[1]);
-            Collections.sort(airportArray[ticketIndexMap.get(ticket[0])]);
+            if (isAscending) Collections.sort(airportArray[ticketIndexMap.get(ticket[0])]);
+            else airportArray[ticketIndexMap.get(ticket[0])].sort(Collections.reverseOrder());
         }
 
-        dfs(0, tickets);
+        answerList.add("ICN");
+        dfs("ICN");
 
-        return answerList;
+        if (answerList.size() == tickets.length + 1) {
+            return answerList;
+        } else {
+            isAscending = false;
+            answerList = new ArrayList<>();
+            return solution(tickets);
+        }
     }
 
-    private static void dfs(int index, String[][] tickets) {
-        boolean isAllVisited = true;
-        for (boolean visit: visited) {
-            if (!visit) {
-                isAllVisited = false;
-                break;
-            }
-        }
-
-        if (isAllVisited) return;
-        visited[index] = true;
-
-        Integer airportIndex = ticketIndexMap.get(tickets[index][0]);
-
-        ArrayList<String> airport = airportArray[airportIndex];
+    private static void dfs(String start) {
+        List<String> airport = airportArray[ticketIndexMap.get(start)];
         if (airport.isEmpty()) return;
-        String nextPath = airport.get(0);
+        String departure = airport.get(0);
+        answerList.add(departure);
+        airport.remove(0);
 
-        answerList.add(nextPath);
-
-        dfs(++index, tickets);
+        dfs(departure);
     }
 }
