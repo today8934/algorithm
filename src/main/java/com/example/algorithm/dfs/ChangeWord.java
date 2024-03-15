@@ -1,60 +1,53 @@
 package com.example.algorithm.dfs;
-/*
+
+
+import java.util.*;
 
 public class ChangeWord {
 
-    private static boolean[] visited;
-    private static int changeCount = 0;
-
-    private static boolean changedSucceed = false;
-
     public static void main(String[] args) {
-        String[] words = new String[6];
-        words[0] = "hot";
-        words[1] = "dot";
-        words[2] = "dog";
-        words[3] = "lot";
-        words[4] = "log";
-        words[5] = "cog";
+        ChangeWord solution = new ChangeWord();
+        String beginWord = "hit";
+        String endWord = "cog";
+        List<String> wordList = Arrays.asList("hot", "dot", "dog", "lot", "log", "cog");
 
-        System.out.println(solution("hit", "cog", words));
+        int result = solution.ladderLength(beginWord, endWord, wordList);
+        System.out.println(result); // Expected output: 5 ("hit" -> "hot" -> "dot" -> "dog" -> "cog")
     }
 
-    private static int solution(String begin, String target, String[] words) {
-        visited = new boolean[begin.length()];
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Set<String> wordSet = new HashSet<>(wordList); // Convert list to set for faster checks
+        if (!wordSet.contains(endWord)) return 0; // End word not in list, return 0
 
-        for (int i = 0; i < begin.length(); i++) {
-            visited[i] = false;
-        }
+        Queue<String> queue = new LinkedList<>();
+        queue.add(beginWord);
 
-        dfs(begin, target, words, 0);
+        int level = 1; // Initialize level to 1 to count the beginWord step
 
-        if (changedSucceed) return changeCount;
-        else return 0;
-    }
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) { // Iterate through all words in the current level
+                String currentWord = queue.poll();
+                if (currentWord.equals(endWord)) return level; // Found the endWord
 
-    private static void dfs(String begin, String target, String[] words, int wordsIndex) {
-        if (begin.equals(target)) {
-            changedSucceed = true;
-            return;
-        }
-
-        int differentCount = 0;
-        for (int i = 0; i < begin.length(); i++) {
-            if (begin.charAt(i) != words[wordsIndex].charAt(i)) differentCount++;
-        }
-
-        for (int i = 0; i < begin.length(); i++) {
-            if (visited[i]) continue;
-
-            if (differentCount == 1) {
-                changeCount++;
-                visited[i] = true;
-                dfs(word, target, words, wordsIndex + 1);
+                // Iterate through all words, if one letter can be changed to make it equal to currentWord, add to queue
+                for (int j = 0; j < currentWord.length(); j++) {
+                    char[] wordChars = currentWord.toCharArray();
+                    for (char ch = 'a'; ch <= 'z'; ch++) {
+                        wordChars[j] = ch;
+                        String transformedWord = new String(wordChars);
+                        if (wordSet.contains(transformedWord)) {
+                            queue.add(transformedWord);
+                            wordSet.remove(transformedWord); // Remove from set to prevent re-visiting
+                        }
+                    }
+                }
             }
+            level++; // Increment level after exploring all words at the current level
         }
 
-
+        return 0; // Target not found
     }
 }
-*/
+
+
