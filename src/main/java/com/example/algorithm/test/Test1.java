@@ -17,7 +17,7 @@ public class Test1 {
         battery[2][0] = 1;
         battery[2][1] = 15000;
         //battery[3][0] = 2;
-        //battery[3][1] = 32000;
+        //battery[3][1] =
 
         Arrays.sort(battery, Comparator.comparingInt(o -> o[1] / o[0]));
         int remaining = n%battery[0][0];
