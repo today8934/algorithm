@@ -1,5 +1,8 @@
 package com.example.algorithm.hashmap;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 383. Ransom Note
  * Easy
@@ -33,6 +36,29 @@ package com.example.algorithm.hashmap;
 public class RansomNote {
 
     public boolean canConstruct(String ransomNote, String magazine) {
+        Map<String, Integer> magazineMap = new HashMap<>();
+
+        for (char c : magazine.toCharArray()) {
+            String s = String.valueOf(c);
+            if (magazineMap.containsKey(s)) {
+                magazineMap.put(s, magazineMap.get(s) + 1);
+            } else {
+                magazineMap.put(s, 1);
+            }
+        }
+
+        for (char c : ransomNote.toCharArray()) {
+            String s = String.valueOf(c);
+            if (magazineMap.containsKey(s)) {
+                if (magazineMap.get(s) > 0) {
+                    magazineMap.put(s, magazineMap.get(s) - 1);
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
 
         return true;
     }
